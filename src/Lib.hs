@@ -18,9 +18,9 @@ database = [ (1, "Julie")
            , (4, "Melman") ]
 
 
-greetUser :: Integer -> Maybe String
+greetUser :: Integer -> Maybe T.Text
 greetUser record =
-  mapToMaybe ("Hello, " ++) (lookup record database)
+  mapToMaybe ("Hello, " <>) (lookup record newDatabase)
 
 
 mapToMaybe :: (a -> b) -> (Maybe a -> Maybe b)
@@ -41,5 +41,11 @@ convertDatabase :: [(Integer, String)] -> [(Integer, T.Text)]
 convertDatabase xs = fmap convertToText xs
 
 
-aFunc :: [(Integer, String)] -> [(Integer, T.Text)]
-aFunc xs = (fmap . fmap) T.strip (convertDatabase xs)
+cleanupDatabase :: [(Integer, String)] -> [(Integer, T.Text)]
+cleanupDatabase xs = (fmap . fmap) T.strip (convertDatabase xs)
+
+
+newDatabase :: [(Integer, T.Text)]
+newDatabase = cleanupDatabase database
+
+
