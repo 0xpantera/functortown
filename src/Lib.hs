@@ -2,7 +2,7 @@
 {-# LANGUAGE InstanceSigs #-}
 module Lib where
 
-
+import Data.Bifunctor
 import qualified Data.Text as T
 
 
@@ -93,12 +93,17 @@ instance Functor Pair where
   fmap f (Pair l r) = Pair (f l) (f r)
 
 
-data IncrementPair a = IncrementPair Integer a
+data IncrementPair a b = IncrementPair a b
   deriving (Show, Eq)
 
-instance Functor IncrementPair where
-  fmap f (IncrementPair int x) = IncrementPair (int + 1) (f x)
+instance Functor (IncrementPair a) where
+  fmap f (IncrementPair l r) = IncrementPair l (f r)
 
+instance Bifunctor IncrementPair where
+  bimap f g (IncrementPair int r) = IncrementPair (f int) (g r)
+  
+increMap :: (Num a) => (b -> c) -> IncrementPair a b -> IncrementPair a c
+increMap = bimap (+1)
 
 data BackwardPair a = BackwardPair a a
   deriving (Show, Eq)
