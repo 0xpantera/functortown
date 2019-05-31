@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Lib
-    ( someFunc
-    ) where
+{-# LANGUAGE InstanceSigs #-}
+module Lib where
 
 
 import qualified Data.Text as T
@@ -49,3 +48,67 @@ newDatabase :: [(Integer, T.Text)]
 newDatabase = cleanupDatabase database
 
 
+composed :: Functor f => f [a] -> f [a]
+composed = fmap (reverse . take 5)
+
+composedfmap :: Functor f => f [a] -> f [a]
+composedfmap = fmap reverse . fmap (take 5)
+
+
+data Username a = Username a a deriving Show
+
+
+instance Functor Username where
+  fmap f (Username x y) = Username (f x) (f y)
+
+
+user :: Username String
+user = Username "Julie " "Moronuki"
+
+users :: [Username String]
+users = [user, Username "Chris " "Martin"]
+
+
+data FlippedEither b a = Error a | Success b
+  deriving Show
+
+instance Functor (FlippedEither s) where
+  fmap :: (a -> b) -> FlippedEither s a -> FlippedEither s b
+  fmap f (Error x) = Error (f x)
+  fmap _ (Success y) = Success y
+
+
+data FlippedPair b a = MkFlippedPair a b
+  deriving Show
+
+instance Functor (FlippedPair s) where
+  fmap :: (a -> b) -> FlippedPair s a -> FlippedPair s b
+  fmap f (MkFlippedPair x y) = MkFlippedPair (f x) y
+
+
+data Pair a = Pair a a
+  deriving (Eq, Show)
+
+instance Functor Pair where
+  fmap f (Pair l r) = Pair (f l) (f r)
+
+
+data IncrementPair a = IncrementPair Integer a
+  deriving (Show, Eq)
+
+instance Functor IncrementPair where
+  fmap f (IncrementPair int x) = IncrementPair (int + 1) (f x)
+
+
+data BackwardPair a = BackwardPair a a
+  deriving (Show, Eq)
+
+instance Functor BackwardPair where
+  fmap f (BackwardPair l r) = BackwardPair (f r) (f l)
+
+
+composedNum :: (Functor f, Num a) => f a -> f a
+composedNum = fmap (abs . (subtract 100))
+
+fcomposedNum :: (Functor f, Num a) => f a -> f a
+fcomposedNum = fmap abs . fmap (subtract 100)
