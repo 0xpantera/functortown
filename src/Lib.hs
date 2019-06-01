@@ -84,12 +84,20 @@ instance Functor (FlippedPair s) where
   fmap f (MkFlippedPair x y) = MkFlippedPair (f x) y
 
 
-data Pair a = Pair a a
+data Pair a = Zero | Pair a a
   deriving (Eq, Show)
 
 instance Functor Pair where
+  fmap f Zero = Zero
   fmap f (Pair l r) = Pair (f l) (f r)
 
+instance Align Pair where
+  nil = Zero
+  align Zero Zero = Zero
+  align (Pair x y) Zero = Pair (TH.This x) (TH.This y)
+  align Zero (Pair x y) = Pair (TH.That x) (TH.That y)
+  align (Pair x y) (Pair x' y') = Pair (TH.These x x') (TH.These y y')
+  
 
 data IncrementPair a b = IncrementPair a b
   deriving (Show, Eq)
