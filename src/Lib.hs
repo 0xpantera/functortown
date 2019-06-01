@@ -124,8 +124,14 @@ instance Bifunctor These  where
   bimap f g (These l r) = These (f l) (g r)
 
 
-instance Align (Either a) where
-  align :: Either a b -> Either a c -> Either a (
+instance Monoid a => Align (Either a) where
+  nil = Left mempty
+  align :: Either a b -> Either a c -> Either a (TH.These b c)
+  align (Left x) (Left x') = Left x
+  align (Left x) (Right y) = Right (TH.That y)
+  align (Right y) (Left x) = Right (TH.This y)
+  align (Right y) (Right z) = Right (TH.These y z)
+  
   
 composedNum :: (Functor f, Num a) => f a -> f a
 composedNum = fmap (abs . (subtract 100))
