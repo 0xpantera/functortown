@@ -2,12 +2,10 @@
 {-# LANGUAGE InstanceSigs #-}
 module Lib where
 
+import Data.Align
 import Data.Bifunctor
 import qualified Data.Text as T
-
-
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import qualified Data.These as TH
 
 
 database :: [(Integer, String)]
@@ -112,6 +110,23 @@ instance Functor BackwardPair where
   fmap f (BackwardPair l r) = BackwardPair (f r) (f l)
 
 
+data These a b = This a | That b | These a b
+  deriving Show
+
+instance Functor (These a) where
+  fmap f (This a) = This a
+  fmap f (That r) = That (f r)
+  fmap f (These l r) = These l (f r)
+
+instance Bifunctor These  where
+  bimap f _ (This l) = This (f l)
+  bimap _ g (That r) = That (g r)
+  bimap f g (These l r) = These (f l) (g r)
+
+
+instance Align (Either a) where
+  align :: Either a b -> Either a c -> Either a (
+  
 composedNum :: (Functor f, Num a) => f a -> f a
 composedNum = fmap (abs . (subtract 100))
 
