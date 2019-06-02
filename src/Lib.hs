@@ -97,7 +97,6 @@ instance Align Pair where
   align (Pair x y) Zero = Pair (TH.This x) (TH.This y)
   align Zero (Pair x y) = Pair (TH.That x) (TH.That y)
   align (Pair x y) (Pair x' y') = Pair (TH.These x x') (TH.These y y')
-  
 
 data IncrementPair a b = IncrementPair a b
   deriving (Show, Eq)
@@ -119,7 +118,7 @@ instance Functor BackwardPair where
 
 
 data These a b = This a | That b | These a b
-  deriving Show
+  deriving (Eq, Show)
 
 instance Functor (These a) where
   fmap f (This a) = This a
