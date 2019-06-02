@@ -83,19 +83,15 @@ tests :: IO ()
 tests =
   do
     checkParallel $ Group "Pair Functor Tests" [
-        ("pair_id", pair_id),
-        ("pair_comp", pair_comp)
-      ]
-    checkParallel $ Group "BackwardPair Functor Tests" [
-        ("backward_id", backward_id),
-        ("backward_comp", backward_comp)
+        ("pair id", pair_id),
+        ("pair composition", pair_comp)
       ]
     checkParallel $ Group "IncrementPair Functor Tests" [
-        ("inc_id", inc_id),
-        ("inc_comp", inc_comp)
+        ("increment id", inc_id),
+        ("increment compposition", inc_comp)
       ]
     checkParallel $ Group "Bifunctor Identity Tests" [
-        ("tuple_id", tuple_id),
+        ("tuple", tuple_id),
         ("left and right", either_id),
         ("this, that and these", these_id)
       ]
