@@ -129,7 +129,7 @@ instance Bifunctor These  where
   bimap f _ (This l) = This (f l)
   bimap _ g (That r) = That (g r)
   bimap f g (These l r) = These (f l) (g r)
-  firt f (This x) = This (f x)
+  first f (This x) = This (f x)
   first _ (That y) = That y
   first f (These x y) = These (f x) y
   second _ (This x) = This x
