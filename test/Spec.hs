@@ -3,6 +3,7 @@
 import Lib
 
 import Data.Bifunctor
+import Data.Char
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
@@ -79,6 +80,23 @@ these_id =
     bimap id id (These x y) === id (These x y)
     
 
+tuple_comp :: Property
+tuple_comp =
+  property $ do
+    x <- forAll $ Gen.element ['a'..'z']
+    y <- forAll $ Gen.int (Range.constantFrom 0 minBound maxBound)
+    bimap toUpper abs (x,y) === (first toUpper . second abs) (x,y)
+
+these_comp :: Property
+these_comp =
+  property $ do
+    x <- forAll $ Gen.element ['a'..'z']
+    y <- forAll $ Gen.int (Range.constantFrom 0 minBound maxBound)
+    bimap toUpper abs (This x :: These Char Int) === first toUpper (This x)
+    bimap toUpper abs (That y :: These Char Int) === second abs (That y)
+    bimap toUpper abs (These x y) === (first toUpper . second abs) (These x y)
+
+
 tests :: IO ()
 tests =
   do
@@ -94,5 +112,9 @@ tests =
         ("tuple", tuple_id),
         ("left and right", either_id),
         ("this, that and these", these_id)
+      ]
+    checkParallel $ Group "Bifunctor Composition Tests" [
+        ("tuple", tuple_comp),
+        ("this, that and these", these_comp)
       ]
     return ()
