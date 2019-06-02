@@ -67,6 +67,16 @@ either_id =
     y <- forAll $ Gen.int (Range.constant minBound maxBound)
     bimap id id (Right y :: Either String Int) === id (Right y)
     bimap id id (Left x :: Either String Int) === id (Left x)
+
+
+these_id :: Property
+these_id =
+  property $ do
+    x <- forAll $ Gen.string (Range.linear 0 100) Gen.ascii
+    y <- forAll $ Gen.int (Range.constant minBound maxBound)
+    bimap id id (This x :: These String Int) === id (This x)
+    bimap id id (That y :: These String Int) === id (That y)
+    bimap id id (These x y) === id (These x y)
     
 
 tests :: IO ()
@@ -86,6 +96,7 @@ tests =
       ]
     checkParallel $ Group "Bifunctor Identity Tests" [
         ("tuple_id", tuple_id),
-        ("left and right", either_id)
+        ("left and right", either_id),
+        ("this, that and these", these_id)
       ]
     return ()
