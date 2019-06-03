@@ -1,5 +1,6 @@
 module Applicative where
 
+import Control.Applicative
 import Data.List (sortBy)
 import Data.Function (on)
 import Numeric.Natural
@@ -11,7 +12,16 @@ instance Functor Option where
   fmap f None = None
   fmap f (Some x) = Some (f x)
   
-
+instance Applicative Option where
+  pure x = Some x
+  None <*> _ = None
+  _ <*> None = None
+  (Some f) <*> (Some x) = Some (f x)
+  liftA2 _ None None = None
+  liftA2 f _ None = None
+  liftA2 f None _ = None
+  liftA2 f (Some x) (Some y) = Some (f x y)
+  
 
 data User = User { name :: String
                  , surname :: String
