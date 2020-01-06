@@ -18,3 +18,6 @@ mapToMaybe _ Nothing = Nothing
 mapToMaybe function (Just a) = Just (function a)
 
 
+mapToEither :: (a -> b) -> Either left a -> Either left b
+mapToEither _ (Left l) = Left l
+mapToEither f (Right r) = Right (f r)
