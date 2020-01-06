@@ -1,4 +1,4 @@
-module Applicative where
+module FunctorLesson where
 
 
 database :: [(Integer, String)]
