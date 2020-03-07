@@ -1,4 +1,6 @@
 {-#LANGUAGE OverloadedStrings #-}
+{-#LANGUAGE InstanceSigs #-}
+
 module FunctorLesson where
 import qualified Data.Text as T
 
@@ -45,13 +47,15 @@ newDatabase = cleanupDatabase database
 data Pair a = Pair a a deriving Show
 
 instance Functor Pair where
-   fmap f (Pair l r) = Pair (f l) (f r)
+  fmap :: (a -> b) -> Pair a -> Pair b
+  fmap f (Pair l r) = Pair (f l) (f r)
 
 
 data Username a = Username a a deriving Show
 
 instance Functor Username where
-   fmap f (Username first last) = Username (f first) (f last)
+  fmap :: (a -> b) -> Username a -> Username b
+  fmap f (Username firstname lastname) = Username (f firstname) (f lastname)
 
 userOne :: Username T.Text
 userOne = Username " Franco " "  Sosa"
@@ -67,5 +71,14 @@ cleanUsers :: [Username T.Text] -> [Username T.Text]
 cleanUsers xs = (fmap . fmap) T.strip xs
 
 
-instance Functor ((,,) a b) where
-   fmap f  (x, y, z) = (x, y, f z)
+data Triple a b c = Triple a b c deriving Show
+
+instance Functor (Triple a b) where
+  fmap :: (c -> d) -> (Triple a b c) -> (Triple a b d)
+  fmap f  (Triple x y z) = Triple x y (f z)
+
+
+addToTriple :: Triple a b Integer -> Integer -> Triple a b Integer
+addToTriple trips adder = fmap (+ adder) trips
+
+
