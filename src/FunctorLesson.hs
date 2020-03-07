@@ -67,3 +67,5 @@ cleanUsers :: [Username T.Text] -> [Username T.Text]
 cleanUsers xs = (fmap . fmap) T.strip xs
 
 
+instance Functor ((,,) a b) where
+   fmap f  (x, y, z) = (x, y, f z)
