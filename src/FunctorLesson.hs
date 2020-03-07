@@ -1,3 +1,4 @@
+{-#LANGUAGE OverloadedStrings #-}
 module FunctorLesson where
 import qualified Data.Text as T
 
@@ -39,5 +40,30 @@ cleanupDatabase xs = (fmap . fmap) T.strip (convertDatabase xs)
 
 newDatabase :: [(Integer, T.Text)]
 newDatabase = cleanupDatabase database
+
+
+data Pair a = Pair a a deriving Show
+
+instance Functor Pair where
+   fmap f (Pair l r) = Pair (f l) (f r)
+
+
+data Username a = Username a a deriving Show
+
+instance Functor Username where
+   fmap f (Username first last) = Username (f first) (f last)
+
+userOne :: Username T.Text
+userOne = Username " Franco " "  Sosa"
+
+userTwo :: Username T.Text
+userTwo = Username "Mariela " " Figueroa"
+
+
+users :: [Username T.Text]
+users = [userOne, userTwo]
+
+cleanUsers :: [Username T.Text] -> [Username T.Text]
+cleanUsers xs = (fmap . fmap) T.strip xs
 
 
