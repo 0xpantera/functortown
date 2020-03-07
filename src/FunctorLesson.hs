@@ -80,5 +80,3 @@ instance Functor (Triple a b) where
 
 addToTriple :: Triple a b Integer -> Integer -> Triple a b Integer
 addToTriple trips adder = fmap (+ adder) trips
-
-
