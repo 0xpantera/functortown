@@ -2,6 +2,7 @@
 {-#LANGUAGE InstanceSigs #-}
 
 module FunctorLesson where
+
 import qualified Data.Text as T
 
 database :: [(Integer, String)]
