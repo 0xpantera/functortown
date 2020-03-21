@@ -64,10 +64,19 @@ incPair_comp =
 tuple_id :: Property
 tuple_id =
   property $ do
-    x <- forAll $ Gen.element ['a' .. 'z']
+    x <- forAll $ Gen.element ['a'..'z']
     y <- forAll $ Gen.int (Range.constant minBound maxBound)
     bimap id id (x, y) === id (x, y)
-    
+
+either_id :: Property
+either_id =
+  property $ do
+    x <- forAll $ Gen.string (Range.linear 0 100) Gen.ascii
+    y <- forAll $ Gen.int (Range.constant minBound maxBound)
+    bimap id id (Right y :: Either String Int) === id (Right y)
+    bimap id id (Left x :: Either String Int) === id (Left x)
+
+
 
 tests :: IO ()
 tests =
