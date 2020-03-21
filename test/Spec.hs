@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Lib
+import Data.Bifunctor
 
 import           Hedgehog
 import qualified Hedgehog.Gen as Gen
@@ -58,6 +59,14 @@ incPair_comp =
     x <- forAll $ Gen.integral (Range.linear 0 100)
     y <- forAll $ Gen.integral (Range.linear 0 100)
     composedNum (IncrementPair x y) === fcomposedNum (IncrementPair x y)
+
+
+tuple_id :: Property
+tuple_id =
+  property $ do
+    x <- forAll $ Gen.element ['a' .. 'z']
+    y <- forAll $ Gen.int (Range.constant minBound maxBound)
+    bimap id id (x, y) === id (x, y)
     
 
 tests :: IO ()
