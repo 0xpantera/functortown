@@ -93,4 +93,8 @@ tests =
         ("incPair_id", incPair_id),
         ("incPair_comp", incPair_comp)
       ]
+    checkParallel $ Group "Bifunctor Identity Tests" [
+        ("tuple_id", tuple_id),
+        ("left and right", either_id)
+      ]
     return ()
