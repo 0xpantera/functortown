@@ -1,4 +1,6 @@
 {-# LANGUAGE InstanceSigs #-}
+module ApplicativeLesson where
+
 import Control.Applicative
 import Data.List (sortBy)
 import Data.Function (on)
