@@ -3,6 +3,7 @@ module MonoidsInFunctors where
 import Control.Applicative
 import Data.Monoid
 
+
 data Person = Person {
     name :: String
   , pl   :: String 
@@ -20,3 +21,12 @@ mkPerson name' pl' =
     Person <$> (nonEmpty name')
            <*> (nonEmpty pl')
 
+data Tuple a b = Tuple a b
+
+instance Functor (Tuple a) where
+  fmap func (Tuple x y) = Tuple x (func y)
+
+instance Monoid a => Applicative (Tuple a) where
+  pure x = Tuple mempty x
+  (Tuple x func) <*> (Tuple y z) = Tuple (x <> y) (func z)
+  liftA2 func (Tuple x z) (Tuple y z') = Tuple (x <> y) (func z z')
