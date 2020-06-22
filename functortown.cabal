@@ -1,0 +1,73 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: fba16c3efcd53f7f22a31c349c051277ef258d59523180cff0de9afdf71f5fe1
+
+name:           functortown
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/Francososa/functortown#readme>
+homepage:       https://github.com/Francososa/functortown#readme
+bug-reports:    https://github.com/Francososa/functortown/issues
+author:         Francisco Sosa
+maintainer:     franky.sosa@gmail.com
+copyright:      Copyright (c) 2019 Francisco Sosa
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/Francososa/functortown
+
+library
+  exposed-modules:
+      FunctorLesson
+      Lib
+  other-modules:
+      Paths_functortown
+  hs-source-dirs:
+      src
+  build-depends:
+        base >=4.7 && <5
+      , text
+      , hedgehog
+      , containers
+      , validation
+  default-language: Haskell2010
+
+executable functortown-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_functortown
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , functortown
+    , hedgehog
+    , containers
+    , validation
+  default-language: Haskell2010
+
+test-suite functortown-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_functortown
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , functortown
+    , hedgehog
+    , containers
+    , validation
+  default-language: Haskell2010
