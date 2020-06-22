@@ -21,18 +21,6 @@ genericMessage =
         genericPitch
         genericClosing
 
-personalizedSalutation name = "Hello " ++ name ++ ","
-
-personalizedPitch name = "I have been looking at your work, " ++ name ++
-    ", and I have an opportunity in the Bay Area that seems right up your alley."
-
-personalizedMessage :: String -> String
-personalizedMessage name =
-    assembleMessage
-        (personalizedSalutation name)
-        (personalizedPitch name)
-        genericClosing
-
 functionPure :: a -> w -> a
 functionPure = const
 
@@ -59,3 +47,32 @@ instance Applicative (Reader env) where
 
     liftA2 :: (a -> b -> c) -> Reader env a -> Reader env b -> Reader env c
     liftA2 f (Reader g) (Reader h) = Reader (\env -> f (g env) (h env))
+
+    (<*>) :: Reader env (a -> b) -> Reader env a -> Reader env b 
+    (Reader f) <*> (Reader g) = Reader (\env -> f env (g env))
+
+
+personalizedSalutation :: Reader String String
+personalizedSalutation = Reader (\name -> "Hello " ++ name ++ ",")
+
+personalizedPitch :: Reader String String
+personalizedPitch = Reader (\name -> "I have been looking at your work, " ++ name ++
+    ", and I have an opportunity in the Bay Area that seems right up your alley.")
+
+personalizedMessage :: String -> String
+personalizedMessage name =
+    assembleMessage
+        (runReader personalizedSalutation name)
+        (runReader personalizedPitch name)
+        genericClosing
+
+messageForFranky = personalizedMessage "Franky"
+
+personalizedMessage' :: Reader String String
+personalizedMessage' =
+    pure assembleMessage
+        <*> personalizedSalutation
+        <*> personalizedPitch
+        <*> pure genericClosing
+
+messageForFranky' = runReader personalizedMessage' "Franky"
