@@ -95,3 +95,13 @@ getAndArrange' = runReaderIO (fn arrange' <*> ReaderIO getLine' <*> ReaderIO get
 newtype ReaderT env f a =
     ReaderT (env -> f a)
 
+instance (Functor f) => Functor (ReaderT env f) where
+    fmap :: (a -> b) -> ReaderT env f a -> ReaderT env f b
+    fmap f (ReaderT xs) = ReaderT $ fmap (fmap f) xs
+
+instance (Applicative f) => Applicative (ReaderT env f) where
+    pure :: a -> ReaderT env f a
+    pure x = ReaderT (pure (pure x))
+
+    liftA2 :: (a -> b -> c) -> ReaderT env f a -> ReaderT env f b -> ReaderT env f c
+    liftA2 f (ReaderT g) (ReaderT h) = ReaderT $ liftA2 (liftA2 f) g h
