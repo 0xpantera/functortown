@@ -104,4 +104,4 @@ instance (Applicative f) => Applicative (ReaderT env f) where
     pure x = ReaderT (pure (pure x))
 
     liftA2 :: (a -> b -> c) -> ReaderT env f a -> ReaderT env f b -> ReaderT env f c
-    liftA2 f (ReaderT g) (ReaderT h) = ReaderT $ liftA2 (liftA2 f) g h
+    liftA2 f (ReaderT g) (ReaderT h) = ReaderT $ \env -> f <$> g env <*> h env --liftA2 (liftA2 f) g h
