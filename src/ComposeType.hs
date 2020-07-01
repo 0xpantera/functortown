@@ -1,5 +1,6 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE DeriveFunctor, DerivingVia #-}
 module ComposeType where
 
 import Control.Applicative
@@ -55,3 +56,9 @@ instance (Applicative f, Applicative g) => Applicative (Compose f g) where
 
     (<*>) :: Compose f g (a -> b) -> Compose f g a -> Compose f g b
     (Compose f) <*> (Compose x) = Compose $ liftA2 (<*>) f x
+
+
+newtype MaybeList a = MaybeList (Maybe [a])
+    deriving Show
+    deriving Functor
+    deriving Applicative via Compose Maybe []
